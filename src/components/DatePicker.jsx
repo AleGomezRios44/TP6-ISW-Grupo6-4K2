@@ -13,7 +13,7 @@ function Datepicker({ cambioFecha }) {
   };
 
   const today = new Date();
-  const initialDate = getInitialDate(today);
+  const initialDate = today
   const [selectedDate, setSelectedDate] = useState(initialDate);
 
   useEffect(() => {

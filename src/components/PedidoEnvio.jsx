@@ -6,11 +6,13 @@ import axios from "axios";
 // import de los servicios
 //import { useNavigate } from "react-router-dom";
 import "../Texto.css";
+import { Country, State, City }  from 'country-state-city';
 
 function PedidoEnvio() {
   //const navigate = useNavigate();
 
   const [fecha, setFecha] = useState(null);
+  const [pais, setPais] = useState(null);
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [selectedProvincia, setSelectedProvincia] = useState("");
@@ -23,35 +25,15 @@ function PedidoEnvio() {
   } = useForm();
 
   const fetchProvincias = async () => {
-    try {
-      const response = await axios.get(
-        "https://apis.datos.gob.ar/georef/api/provincias"
-      );
-      setProvincias(response.data.provincias);
-    } catch (error) {
-      Swal.fire({
-        text: "Error al obtener provincias",
-        icon: "error",
-        confirmButtonText: "Ok",
-      });
-    }
+    const prov = State.getStatesOfCountry("AR")
+    setProvincias(prov);
   };
 
   // Función para obtener localidades por provincia
   const fetchLocalidades = async (provinciaId) => {
-    try {
-      const response = await axios.get(
-        `https://apis.datos.gob.ar/georef/api/localidades?provincia=${provinciaId}`
-      );
-      console.log("Localidades obtenidas:", response.data.localidades);
-      setLocalidades(response.data.localidades);
-    } catch (error) {
-      Swal.fire({
-        text: "Error al obtener localidades",
-        icon: "error",
-        confirmButtonText: "Ok",
-      });
-    }
+    const loc = City.getCitiesOfState("AR", provinciaId)
+    setLocalidades(loc);
+    console.log(loc)
   };
 
   useEffect(() => {
@@ -230,8 +212,8 @@ function PedidoEnvio() {
             >
               <option value="">Seleccione una provincia</option>
               {provincias.map((provincia) => (
-                <option key={provincia.id} value={provincia.id}>
-                  {provincia.nombre}
+                <option key={provincia.isoCode} value={provincia.isoCode}>
+                  {provincia.name}
                 </option>
               ))}
             </select>
@@ -250,7 +232,7 @@ function PedidoEnvio() {
               <option value="">Seleccione una localidad</option>
               {localidades.map((localidad) => (
                 <option key={localidad.id} value={localidad.id}>
-                  {localidad.nombre}
+                  {localidad.name}
                 </option>
               ))}
             </select>
