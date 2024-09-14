@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Datepicker from "./DatePicker";
 import { useState, useEffect } from "react";
-import axios from "axios";
-// import de los servicios
+//import axios from "axios";
+//import de los servicios
 //import { useNavigate } from "react-router-dom";
 import "../Texto.css";
 import { Country, State, City }  from 'country-state-city';
@@ -11,7 +11,8 @@ import { Country, State, City }  from 'country-state-city';
 function PedidoEnvio() {
   //const navigate = useNavigate();
 
-  const [fecha, setFecha] = useState(null);
+  const [fechaRetiro, setFechaRetiro] = useState(null);
+  const [fechaEntrega, setFechaEntrega] = useState(null)
   const [pais, setPais] = useState(null);
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
@@ -47,12 +48,20 @@ function PedidoEnvio() {
   };
 
   //seteo de fecha del DatePicker (formato previo para comparacion)
-  const tomarFecha = (date) => {
+  const tomarFechaRetiro = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const fechaFormateada = `${year}-${month}-${day}`;
-    setFecha(fechaFormateada);
+    setFechaRetiro(fechaFormateada);
+  };
+
+  const tomarFechaEntrega = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const fechaFormateada = `${year}-${month}-${day}`;
+    setFechaEntrega(fechaFormateada);
   };
 
   function scrollToBottom() {
@@ -69,30 +78,31 @@ function PedidoEnvio() {
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const day = String(today.getDate()).padStart(2, "0");
-    const todayFormatted = `${year}-${month}-${day}`;
+    const diferenciaDias = (new Date(fechaEntrega).getTime() - new Date(fechaRetiro).getTime()) / (1000 * 60 * 60 * 24);
 
-    if (fecha === null || fecha === todayFormatted) {
+    if (fechaRetiro === null || fechaEntrega === null || fechaEntrega < fechaRetiro) {
       error = true;
       Swal.fire({
         text:
-          fecha === null
-            ? "Debe seleccionar una fecha"
-            : "No se puede seleccionar la fecha de hoy",
+          fechaRetiro === null || fechaEntrega === null
+            ? "Debe seleccionar una fecha de retiro y de entrega"
+            : "La fecha de entrega no puede ser anterior a la de retiro",
         icon: "warning",
         confirmButtonText: "Ok",
       });
     }
 
-    if (fecha === null) {
+    if (diferenciaDias > 10) {
       error = true;
       Swal.fire({
-        text: "Debe seleccionar una fecha",
+        text: "La fecha de entrega debe ser como máximo de 10 días despúes del retiro",
         icon: "warning",
         confirmButtonText: "Ok",
       });
     }
 
     if (!error) {
+
     }
   };
 
@@ -266,7 +276,7 @@ function PedidoEnvio() {
             <div style={{ display: "inline-block" }}>
               {" "}
               {/* Contenedor para centrar el DatePicker */}
-              <Datepicker cambioFecha={tomarFecha} />
+              <Datepicker cambioFecha={tomarFechaRetiro} />
             </div>
           </div>
 
@@ -392,7 +402,7 @@ function PedidoEnvio() {
               <option value="">Seleccione una provincia</option>
               {provincias.map((provincia) => (
                 <option key={provincia.id} value={provincia.id}>
-                  {provincia.nombre}
+                  {provincia.name}
                 </option>
               ))}
             </select>
@@ -411,7 +421,7 @@ function PedidoEnvio() {
               <option value="">Seleccione una localidad</option>
               {localidades.map((localidad) => (
                 <option key={localidad.id} value={localidad.id}>
-                  {localidad.nombre}
+                  {localidad.name}
                 </option>
               ))}
             </select>
@@ -429,7 +439,7 @@ function PedidoEnvio() {
           >
             Fecha de entrega:
           </h5>
-          <Datepicker cambioFecha={tomarFecha} />
+          <Datepicker cambioFecha={tomarFechaEntrega} />
         </div>
         <div className="roboto-texto">
           <button type="submit" className="btn btn-primary">
