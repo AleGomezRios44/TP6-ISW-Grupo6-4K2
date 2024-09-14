@@ -33,6 +33,9 @@ const transportistas = [
 console.log(transportistas);
 
 //Preguntar de donde puedo sacar una lista de provincias
+//
+//import { State, City }  from 'country-state-city';
+//const prov = State.getStatesOfCountry("AR") -> esto es una lista de objetos, tienen una propiedad "name", con el nombre de la provincia, y un "isoCode" para identificarlas
 app.post('/guardar-datos', (req, res) => {
     const {
         tipoCarga,

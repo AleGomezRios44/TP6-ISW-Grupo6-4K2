@@ -6,17 +6,18 @@ import { useState, useEffect } from "react";
 //import de los servicios
 //import { useNavigate } from "react-router-dom";
 import "../Texto.css";
-import { Country, State, City }  from 'country-state-city';
+import { State, City }  from 'country-state-city';
 
 function PedidoEnvio() {
   //const navigate = useNavigate();
 
   const [fechaRetiro, setFechaRetiro] = useState(null);
   const [fechaEntrega, setFechaEntrega] = useState(null)
-  const [pais, setPais] = useState(null);
   const [provincias, setProvincias] = useState([]);
-  const [localidades, setLocalidades] = useState([]);
-  const [selectedProvincia, setSelectedProvincia] = useState("");
+  const [localidadesRetiro, setLocalidadesRetiro] = useState([]);
+  const [localidadesEntrega, setLocalidadesEntrega] = useState([]);
+  const [selectedProvinciaRetiro, setSelectedProvinciaRetiro] = useState("");
+  const [selectedProvinciaEntrega, setSelectedProvinciaEntrega] = useState("");
 
   const {
     register,
@@ -31,20 +32,30 @@ function PedidoEnvio() {
   };
 
   // Función para obtener localidades por provincia
-  const fetchLocalidades = async (provinciaId) => {
+  const fetchLocalidadesRet = async (provinciaId) => {
     const loc = City.getCitiesOfState("AR", provinciaId)
-    setLocalidades(loc);
-    console.log(loc)
+    setLocalidadesRetiro(loc);
+  };
+
+  const fetchLocalidadesEnt = async (provinciaId) => {
+    const loc = City.getCitiesOfState("AR", provinciaId)
+    setLocalidadesEntrega(loc);
   };
 
   useEffect(() => {
     fetchProvincias();
   }, []);
 
-  const handleProvinciaChange = (e) => {
+  const handleProvinciaRetChange = (e) => {
     const provinciaId = e.target.value;
-    setSelectedProvincia(provinciaId);
-    fetchLocalidades(provinciaId);
+    setSelectedProvinciaRetiro(provinciaId);
+    fetchLocalidadesRet(provinciaId);
+  };
+
+  const handleProvinciaEntChange = (e) => {
+    const provinciaId = e.target.value;
+    setSelectedProvinciaEntrega(provinciaId);
+    fetchLocalidadesEnt(provinciaId);
   };
 
   //seteo de fecha del DatePicker (formato previo para comparacion)
@@ -74,10 +85,6 @@ function PedidoEnvio() {
   const onSubmit = async (data) => {
     let error = false;
 
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
     const diferenciaDias = (new Date(fechaEntrega).getTime() - new Date(fechaRetiro).getTime()) / (1000 * 60 * 60 * 24);
 
     if (fechaRetiro === null || fechaEntrega === null || fechaEntrega < fechaRetiro) {
@@ -146,7 +153,7 @@ function PedidoEnvio() {
             />
             {errors.calleRetiro && (
               <div className="alert alert-danger" role="alert">
-                El nombre de la calle es un campo necesario
+                El nombre de la calle del domicilio de retiro es un campo necesario
               </div>
             )}
           </div>
@@ -160,7 +167,7 @@ function PedidoEnvio() {
             />
             {errors.alturaRetiro && (
               <div className="alert alert-danger" role="alert">
-                El numero del domicilio es necesario
+                El numero del domicilio de retiro es un campo necesario
               </div>
             )}
           </div>
@@ -216,9 +223,9 @@ function PedidoEnvio() {
             <h5 className="form-label roboto-texto">Provincia:</h5>
             <select
               className="form-select"
-              {...register("prov", { required: true })}
-              value={selectedProvincia}
-              onChange={handleProvinciaChange}
+              {...register("provRetiro", { required: true })}
+              value={selectedProvinciaRetiro}
+              onChange={handleProvinciaRetChange}
             >
               <option value="">Seleccione una provincia</option>
               {provincias.map((provincia) => (
@@ -227,9 +234,9 @@ function PedidoEnvio() {
                 </option>
               ))}
             </select>
-            {errors.prov && (
+            {errors.provRetiro && (
               <div className="alert alert-danger" role="alert">
-                La provincia es un campo necesario
+                La provincia de retiro es un campo necesario
               </div>
             )}
           </div>
@@ -237,16 +244,16 @@ function PedidoEnvio() {
             <h5 className="form-label roboto-texto">Localidad:</h5>
             <select
               className="form-select"
-              {...register("loc", { required: true })}
+              {...register("locRetiro", { required: true })}
             >
               <option value="">Seleccione una localidad</option>
-              {localidades.map((localidad) => (
+              {localidadesRetiro.map((localidad) => (
                 <option key={localidad.id} value={localidad.id}>
                   {localidad.name}
                 </option>
               ))}
             </select>
-            {errors.loc && (
+            {errors.locRetiro && (
               <div className="alert alert-danger" role="alert">
                 La localidad es un campo necesario
               </div>
@@ -289,7 +296,7 @@ function PedidoEnvio() {
           >
             <h5 className="form-label roboto-texto">Tipo de carga:</h5>
             <div style={{ display: "inline-block", maxWidth: "250px" }}>
-              <select className="form-select" {...register("carga")}>
+              <select className="form-select" {...register("carga", { required: true })}>
                 <option value="">Seleccione un tipo de carga</option>
                 <option value="0" disabled={false}>
                   Documentación
@@ -304,6 +311,11 @@ function PedidoEnvio() {
                   Hacienda
                 </option>
               </select>
+              {errors.carga && (
+    <div className="alert alert-danger" role="alert">
+      Debe seleccionar un tipo de carga
+    </div>
+  )}
             </div>
           </div>
         </div>
@@ -320,12 +332,12 @@ function PedidoEnvio() {
             <input
               type="string"
               className="form-control"
-              {...register("calle", { required: true })}
+              {...register("calleEntrega", { required: true })}
               autoComplete="off"
             />
-            {errors.dni && (
+            {errors.calleEntrega && (
               <div className="alert alert-danger" role="alert">
-                El nombre de la calle es un campo necesario
+                El nombre de la calle del domicilio de entrega es un campo necesario
               </div>
             )}
           </div>
@@ -334,12 +346,12 @@ function PedidoEnvio() {
             <input
               type="string"
               className="form-control"
-              {...register("altura", { required: true })}
+              {...register("alturaEntrega", { required: true })}
               autoComplete="off"
             />
-            {errors.mail && (
+            {errors.alturaEntrega && (
               <div className="alert alert-danger" role="alert">
-                El numero del domicilio es necesario
+                El numero del domicilio de entrega es necesario
               </div>
             )}
           </div>
@@ -395,18 +407,18 @@ function PedidoEnvio() {
             <h5 className="form-label roboto-texto">Provincia:</h5>
             <select
               className="form-select"
-              {...register("prov", { required: true })}
-              value={selectedProvincia}
-              onChange={handleProvinciaChange}
+              {...register("provEntrega", { required: true })}
+              value={selectedProvinciaEntrega}
+              onChange={handleProvinciaEntChange}
             >
               <option value="">Seleccione una provincia</option>
               {provincias.map((provincia) => (
-                <option key={provincia.id} value={provincia.id}>
+                <option key={provincia.isoCode} value={provincia.isoCode}>
                   {provincia.name}
                 </option>
               ))}
             </select>
-            {errors.prov && (
+            {errors.provEntrega && (
               <div className="alert alert-danger" role="alert">
                 La provincia es un campo necesario
               </div>
@@ -416,16 +428,16 @@ function PedidoEnvio() {
             <h5 className="form-label roboto-texto">Localidad:</h5>
             <select
               className="form-select"
-              {...register("loc", { required: true })}
+              {...register("locEntrega", { required: true })}
             >
               <option value="">Seleccione una localidad</option>
-              {localidades.map((localidad) => (
+              {localidadesEntrega.map((localidad) => (
                 <option key={localidad.id} value={localidad.id}>
                   {localidad.name}
                 </option>
               ))}
             </select>
-            {errors.loc && (
+            {errors.locEntrega && (
               <div className="alert alert-danger" role="alert">
                 La localidad es un campo necesario
               </div>
