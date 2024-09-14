@@ -7,24 +7,28 @@ const transportistas = [
     {
         nombre: 'Juan Pérez',
         localidad: 'Córdoba',
-        provincia: 'Córdoba'
+        provincia: 'Córdoba',
+        email: 'juan.perez@example.com'
     },
     {
         nombre: 'María García',
         localidad: 'Rosario',
-        provincia: 'Santa Fe'
+        provincia: 'Santa Fe',
+        email: 'maria.garcia@example.com'
     },
     {
         nombre: 'Carlos López',
         localidad: 'Mendoza',
-        provincia: 'Mendoza'
+        provincia: 'Mendoza',
+        email: 'carlos.lopez@example.com'
     },
     {
         nombre: 'Ana Fernández',
         localidad: 'Salta',
-        provincia: 'Salta'
+        provincia: 'Salta',
+        email: 'ana.fernandez@example.com'
     }
-];
+]
 
 console.log(transportistas);
 
