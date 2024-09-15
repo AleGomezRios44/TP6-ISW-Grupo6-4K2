@@ -4,15 +4,15 @@ import Datepicker from "./DatePicker";
 import { useState, useEffect } from "react";
 //import de los servicios
 import "../Texto.css";
-import { State, City }  from 'country-state-city';
+import { State, City } from "country-state-city";
 
 function PedidoEnvio() {
-
   const [fechaRetiro, setFechaRetiro] = useState(null);
-  const [fechaEntrega, setFechaEntrega] = useState(null)
+  const [fechaEntrega, setFechaEntrega] = useState(null);
   const [provincias, setProvincias] = useState([]);
   const [selectedProvinciaRetiro, setSelectedProvinciaRetiro] = useState("");
   const [selectedProvinciaEntrega, setSelectedProvinciaEntrega] = useState("");
+  const [imagenes, setImagenes] = useState(null);
 
   const {
     register,
@@ -22,7 +22,7 @@ function PedidoEnvio() {
   } = useForm();
 
   const fetchProvincias = async () => {
-    const prov = State.getStatesOfCountry("AR")
+    const prov = State.getStatesOfCountry("AR");
     setProvincias(prov);
   };
 
@@ -57,18 +57,86 @@ function PedidoEnvio() {
     setFechaEntrega(fechaFormateada);
   };
 
+  const tomarImagenes = (imagenes) => {
+    let error = false;
+    let totalSize = 0;
+    // Tipos permitidos
+    const tiposPermitidos = ["image/jpeg", "image/png", "image/jpg"];
+
+    if (imagenes.length > 3) {
+      Swal.fire({
+        text: "No se pueden subir más de 3 imágenes.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+      error = true;
+    }
+
+    // Recorrer todas las imágenes para comprobar el tamaño
+    for (let i = 0; i < imagenes.length; i++) {
+      const fileSizeMB = imagenes[i].size / (1024 * 1024); // tamaño en MB
+      totalSize += fileSizeMB;
+      if (fileSizeMB > 10) {
+        Swal.fire({
+          text: `La imagen ${imagenes[i].name} supera el límite de 10 MB.`,
+          icon: "warning",
+          confirmButtonText: "Ok",
+        });
+        error = true;
+        break;
+      }
+
+      // Validar el tipo de archivo
+      if (!tiposPermitidos.includes(imagenes[i].type)) {
+        Swal.fire({
+          text: `El archivo ${imagenes[i].name} no es un tipo de imagen permitido. Solo se aceptan archivos PNG, JPG o JPEG.`,
+          icon: "warning",
+          confirmButtonText: "Ok",
+        });
+        error = true;
+        break;
+      }
+    }
+
+    if (totalSize > 10) {
+      Swal.fire({
+        text: "El tamaño total de las imágenes no puede superar los 10 MB.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+      error = true;
+    }
+
+    if (!error) {
+      // Si no hay errores, guardar las imágenes en el estado
+      setImagenes(imagenes);
+      console.log(imagenes)
+      Swal.fire({
+        text: "Imágenes cargadas correctamente.",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
+    }
+  };
+
   const onSubmit = async (data) => {
     let error = false;
 
-    const diferenciaDias = (new Date(fechaEntrega).getTime() - new Date(fechaRetiro).getTime()) / (1000 * 60 * 60 * 24);
+    const diferenciaDias =
+      (new Date(fechaEntrega).getTime() - new Date(fechaRetiro).getTime()) /
+      (1000 * 60 * 60 * 24);
 
-    if (fechaRetiro === null || fechaEntrega === null || fechaEntrega < fechaRetiro) {
+    if (
+      fechaRetiro === null ||
+      fechaEntrega === null ||
+      fechaEntrega <= fechaRetiro
+    ) {
       error = true;
       Swal.fire({
         text:
           fechaRetiro === null || fechaEntrega === null
             ? "Debe seleccionar una fecha de retiro y de entrega"
-            : "La fecha de entrega no puede ser anterior a la de retiro",
+            : "La fecha de entrega no puede ser anterior o igual a la de retiro",
         icon: "warning",
         confirmButtonText: "Ok",
       });
@@ -83,8 +151,50 @@ function PedidoEnvio() {
       });
     }
 
-    if (!error) {
+    const regexSoloLetras = /^[a-zA-Z\s]+$/;
+    const regexSoloNumeros = /^[0-9]+$/;
 
+    // Validación de la calle de retiro
+    if (!regexSoloLetras.test(data.calleRetiro)) {
+      error = true;
+      Swal.fire({
+        text: "El nombre de la calle de retiro solo puede contener letras y espacios.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+
+    // Validación de la calle de entrega
+    if (!regexSoloLetras.test(data.calleEntrega)) {
+      error = true;
+      Swal.fire({
+        text: "El nombre de la calle de entrega solo puede contener letras y espacios.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+
+    // Validación de la altura de retiro
+    if (!regexSoloNumeros.test(data.alturaRetiro)) {
+      error = true;
+      Swal.fire({
+        text: "La altura de retiro debe contener solo números.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+
+    // Validación de la altura de entrega
+    if (!regexSoloNumeros.test(data.alturaEntrega)) {
+      error = true;
+      Swal.fire({
+        text: "La altura de entrega debe contener solo números.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+
+    if (!error) {
     }
   };
 
@@ -104,7 +214,7 @@ function PedidoEnvio() {
   };
 
   return (
-    <div style={{backgroundColor: "#CAF0F8", padding: "30px" }}>
+    <div style={{ backgroundColor: "#CAF0F8", padding: "30px" }}>
       <h2 className="roboto-titulo" style={{ paddingBottom: "15px" }}>
         Pedido de Envio
       </h2>
@@ -127,7 +237,8 @@ function PedidoEnvio() {
             />
             {errors.calleRetiro && (
               <div className="alert alert-danger" role="alert">
-                El nombre de la calle del domicilio de retiro es un campo necesario
+                El nombre de la calle del domicilio de retiro es un campo
+                necesario
               </div>
             )}
           </div>
@@ -265,7 +376,10 @@ function PedidoEnvio() {
           >
             <h5 className="form-label roboto-texto">Tipo de carga:</h5>
             <div style={{ display: "inline-block", maxWidth: "250px" }}>
-              <select className="form-select" {...register("carga", { required: true })}>
+              <select
+                className="form-select"
+                {...register("carga", { required: true })}
+              >
                 <option value="">Seleccione un tipo de carga</option>
                 <option value="0" disabled={false}>
                   Documentación
@@ -281,10 +395,10 @@ function PedidoEnvio() {
                 </option>
               </select>
               {errors.carga && (
-    <div className="alert alert-danger" role="alert">
-      Debe seleccionar un tipo de carga
-    </div>
-  )}
+                <div className="alert alert-danger" role="alert">
+                  Debe seleccionar un tipo de carga
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -306,7 +420,8 @@ function PedidoEnvio() {
             />
             {errors.calleEntrega && (
               <div className="alert alert-danger" role="alert">
-                El nombre de la calle del domicilio de entrega es un campo necesario
+                El nombre de la calle del domicilio de entrega es un campo
+                necesario
               </div>
             )}
           </div>
@@ -416,6 +531,22 @@ function PedidoEnvio() {
             Fecha de entrega:
           </h5>
           <Datepicker cambioFecha={tomarFechaEntrega} />
+        </div>
+        <div className="mb-3 roboto-texto">
+          <h4
+            className="form-label roboto-texto"
+            style={{ paddingBottom: "6px" }}
+          >
+            Imagen/es de la carga:
+          </h4>
+          <input
+            type="file"
+            name=""
+            id=""
+            multiple
+            style={{ paddingBottom: "5px" }}
+            onChange={(e) => tomarImagenes(e.target.files)}
+          ></input>
         </div>
         <div className="roboto-texto">
           <button type="submit" className="btn btn-primary">
