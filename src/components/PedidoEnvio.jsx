@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 //import de los servicios
 import { uploadFile } from "../services/firebase";
 import "../Texto.css";
-import { State, City } from "country-state-city";
+import { State } from "country-state-city";
 
 function PedidoEnvio() {
   const [fechaRetiro, setFechaRetiro] = useState(null);
@@ -411,7 +411,7 @@ function PedidoEnvio() {
             >
               <option value="">Seleccione una provincia</option>
               {provincias.map((provincia) => (
-                <option key={provincia.isoCode} value={provincia.isoCode}>
+                <option key={provincia.isoCode} value={provincia.name}>
                   {provincia.name}
                 </option>
               ))}
@@ -596,7 +596,7 @@ function PedidoEnvio() {
             >
               <option value="">Seleccione una provincia</option>
               {provincias.map((provincia) => (
-                <option key={provincia.isoCode} value={provincia.isoCode}>
+                <option key={provincia.isoCode} value={provincia.name}>
                   {provincia.name}
                 </option>
               ))}

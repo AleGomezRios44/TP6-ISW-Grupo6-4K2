@@ -4,14 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { es } from "date-fns/locale";
 
 function Datepicker({ cambioFecha }) {
-  const getInitialDate = (currentDate) => {
-    const dayOfWeek = currentDate.getDay();
-    const daysToAdd = dayOfWeek >= 5 ? 8 - dayOfWeek : 1 - dayOfWeek;
-    const initialDate = new Date(currentDate);
-    initialDate.setDate(currentDate.getDate() + daysToAdd);
-    return initialDate;
-  };
-
   const today = new Date();
   const initialDate = today
   const [selectedDate, setSelectedDate] = useState(initialDate);

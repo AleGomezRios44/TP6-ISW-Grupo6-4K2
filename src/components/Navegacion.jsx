@@ -1,4 +1,4 @@
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Container, Nav } from 'react-bootstrap';
 import logo from '../images/logo.webp'
 import Dropdown from 'react-bootstrap/Dropdown';
 import "../Texto.css";
