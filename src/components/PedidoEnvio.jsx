@@ -2,20 +2,15 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Datepicker from "./DatePicker";
 import { useState, useEffect } from "react";
-//import axios from "axios";
 //import de los servicios
-//import { useNavigate } from "react-router-dom";
 import "../Texto.css";
 import { State, City }  from 'country-state-city';
 
 function PedidoEnvio() {
-  //const navigate = useNavigate();
 
   const [fechaRetiro, setFechaRetiro] = useState(null);
   const [fechaEntrega, setFechaEntrega] = useState(null)
   const [provincias, setProvincias] = useState([]);
-  const [localidadesRetiro, setLocalidadesRetiro] = useState([]);
-  const [localidadesEntrega, setLocalidadesEntrega] = useState([]);
   const [selectedProvinciaRetiro, setSelectedProvinciaRetiro] = useState("");
   const [selectedProvinciaEntrega, setSelectedProvinciaEntrega] = useState("");
 
@@ -31,17 +26,6 @@ function PedidoEnvio() {
     setProvincias(prov);
   };
 
-  // Función para obtener localidades por provincia
-  const fetchLocalidadesRet = async (provinciaId) => {
-    const loc = City.getCitiesOfState("AR", provinciaId)
-    setLocalidadesRetiro(loc);
-  };
-
-  const fetchLocalidadesEnt = async (provinciaId) => {
-    const loc = City.getCitiesOfState("AR", provinciaId)
-    setLocalidadesEntrega(loc);
-  };
-
   useEffect(() => {
     fetchProvincias();
   }, []);
@@ -49,13 +33,11 @@ function PedidoEnvio() {
   const handleProvinciaRetChange = (e) => {
     const provinciaId = e.target.value;
     setSelectedProvinciaRetiro(provinciaId);
-    fetchLocalidadesRet(provinciaId);
   };
 
   const handleProvinciaEntChange = (e) => {
     const provinciaId = e.target.value;
     setSelectedProvinciaEntrega(provinciaId);
-    fetchLocalidadesEnt(provinciaId);
   };
 
   //seteo de fecha del DatePicker (formato previo para comparacion)
@@ -74,13 +56,6 @@ function PedidoEnvio() {
     const fechaFormateada = `${year}-${month}-${day}`;
     setFechaEntrega(fechaFormateada);
   };
-
-  function scrollToBottom() {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
-  }
 
   const onSubmit = async (data) => {
     let error = false;
@@ -123,14 +98,13 @@ function PedidoEnvio() {
     }).then((result) => {
       if (result.isConfirmed) {
         reset();
-        //navigate("/home");
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
     });
   };
 
   return (
-    <div style={{ padding: "30px" }}>
+    <div style={{backgroundColor: "#CAF0F8", padding: "30px" }}>
       <h2 className="roboto-titulo" style={{ paddingBottom: "15px" }}>
         Pedido de Envio
       </h2>
@@ -242,20 +216,15 @@ function PedidoEnvio() {
           </div>
           <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
             <h5 className="form-label roboto-texto">Localidad:</h5>
-            <select
-              className="form-select"
-              {...register("locRetiro", { required: true })}
-            >
-              <option value="">Seleccione una localidad</option>
-              {localidadesRetiro.map((localidad) => (
-                <option key={localidad.id} value={localidad.id}>
-                  {localidad.name}
-                </option>
-              ))}
-            </select>
-            {errors.locRetiro && (
+            <input
+              type="string"
+              className="form-control"
+              {...register("localidadRetiro", { required: true })}
+              autoComplete="off"
+            />
+            {errors.localidadRetiro && (
               <div className="alert alert-danger" role="alert">
-                La localidad es un campo necesario
+                La ciudad de retiro es un campo necesario
               </div>
             )}
           </div>
@@ -426,20 +395,15 @@ function PedidoEnvio() {
           </div>
           <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
             <h5 className="form-label roboto-texto">Localidad:</h5>
-            <select
-              className="form-select"
-              {...register("locEntrega", { required: true })}
-            >
-              <option value="">Seleccione una localidad</option>
-              {localidadesEntrega.map((localidad) => (
-                <option key={localidad.id} value={localidad.id}>
-                  {localidad.name}
-                </option>
-              ))}
-            </select>
-            {errors.locEntrega && (
+            <input
+              type="string"
+              className="form-control"
+              {...register("localidadEntrega", { required: true })}
+              autoComplete="off"
+            />
+            {errors.localidadEntrega && (
               <div className="alert alert-danger" role="alert">
-                La localidad es un campo necesario
+                La ciudad de entrega es un campo necesario
               </div>
             )}
           </div>
