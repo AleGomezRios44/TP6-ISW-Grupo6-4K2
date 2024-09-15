@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import Datepicker from "./DatePicker";
 import { useState, useEffect } from "react";
 //import de los servicios
+import { uploadFile } from "../services/firebase";
 import "../Texto.css";
 import { State, City } from "country-state-city";
 
@@ -12,7 +13,7 @@ function PedidoEnvio() {
   const [provincias, setProvincias] = useState([]);
   const [selectedProvinciaRetiro, setSelectedProvinciaRetiro] = useState("");
   const [selectedProvinciaEntrega, setSelectedProvinciaEntrega] = useState("");
-  const [imagenes, setImagenes] = useState(null);
+  const [imagenes, setImagenes] = useState([]);
 
   const {
     register,
@@ -110,7 +111,6 @@ function PedidoEnvio() {
     if (!error) {
       // Si no hay errores, guardar las imágenes en el estado
       setImagenes(imagenes);
-      console.log(imagenes)
       Swal.fire({
         text: "Imágenes cargadas correctamente.",
         icon: "success",
@@ -118,6 +118,29 @@ function PedidoEnvio() {
       });
     }
   };
+
+  const uploadImgs = async (images) => {
+    try {
+      const imgURLs = await Promise.all(
+        Array.from(images).map((image) => uploadFile(image))
+      );
+      return imgURLs;
+    } catch (error) {
+      Swal.fire({
+        text: "Error al procesar el pedido. Reintente más tarde.",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+      return [];
+    }
+  };
+  
+  function normalizeText(text) {
+    return text
+      .toLowerCase() // Convierte a minúsculas
+      .normalize("NFD") // Normaliza el texto a su forma canónica
+      .replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
+  }
 
   const onSubmit = async (data) => {
     let error = false;
@@ -194,7 +217,79 @@ function PedidoEnvio() {
       });
     }
 
+    //Validacion localidad de retiro sin numeros
+    if (!regexSoloLetras.test(data.localidadRetiro)) {
+      error = true;
+      Swal.fire({
+        text: "El nombre de la localidad de retiro solo puede contener letras y espacios.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+
+    //Validacion localidad entrega sin numeros
+    if (!regexSoloLetras.test(data.localidadEntrega)) {
+      error = true;
+      Swal.fire({
+        text: "El nombre de la localidad de entrega solo puede contener letras y espacios.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+    }
+
     if (!error) {
+
+      //subir fotos
+      let imgs
+      if(imagenes){
+        imgs = await uploadImgs(imagenes) //devuelve una lista con las urls de las imagenes
+      }
+      else{
+        imgs = imagenes
+      }
+
+      //transformar los inputs
+      const localidadEntNormalizada = normalizeText(data.localidadEntrega)
+      const localidadRetNormalizada = normalizeText(data.localidadRetiro)
+      const calleEntNormalizada = normalizeText(data.calleEntrega)
+      const calleRetNormalizada = normalizeText(data.calleRetiro)
+
+      //hacer el objeto con todo
+      const pedidoEnvio = {
+        domicilioRetiro: {
+          calle: calleRetNormalizada,
+          altura: data.alturaRetiro,
+          dpto: data.dptoRetiro,
+          referencia: data.referenciaRetiro,
+          provincia: data.provEntrega,
+          localidad: localidadRetNormalizada
+        },
+        domicilioEntrega: {
+          calle: calleEntNormalizada,
+          altura: data.alturaEntrega,
+          dpto: data.dptoEntrega,
+          referencia: data.referenciaEntrega,
+          provincia: data.provEntrega,
+          localidad: localidadEntNormalizada
+        },
+        carga: data.carga,
+        fechaRetiro: fechaRetiro,
+        fechaEntrega: fechaEntrega,
+        imagenes: imgs
+      }
+
+      //mostrar modal intermedio de confirmacion de datos
+
+      console.log(pedidoEnvio)
+      //llamar a la funcion que lo guarda y pasarle el pedido, esa funcion debe enviar los mails correspondientes
+
+
+      reset()
+      Swal.fire({
+        text: "Pedido realizado correctamente. Notificación enviada.",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
     }
   };
 
@@ -278,6 +373,7 @@ function PedidoEnvio() {
               placeholder="(opcional)"
               {...register("dptoRetiro", { required: false })}
               autoComplete="off"
+              defaultValue={""}
             />
           </div>
           <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
@@ -293,6 +389,7 @@ function PedidoEnvio() {
               placeholder="(opcional)"
               {...register("referenciaRetiro", { required: false })}
               autoComplete="off"
+              defaultValue={""}
             />
           </div>
         </div>
@@ -459,8 +556,9 @@ function PedidoEnvio() {
               type="text"
               className="form-control"
               placeholder="(opcional)"
-              {...register("dpto", { required: false })}
+              {...register("dptoEntrega", { required: false })}
               autoComplete="off"
+              defaultValue={""}
             />
           </div>
           <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
@@ -474,8 +572,9 @@ function PedidoEnvio() {
               type="text"
               className="form-control"
               placeholder="(opcional)"
-              {...register("referencia", { required: false })}
+              {...register("referenciaEntrega", { required: false })}
               autoComplete="off"
+              defaultValue={""}
             />
           </div>
         </div>
@@ -541,8 +640,6 @@ function PedidoEnvio() {
           </h4>
           <input
             type="file"
-            name=""
-            id=""
             multiple
             style={{ paddingBottom: "5px" }}
             onChange={(e) => tomarImagenes(e.target.files)}
