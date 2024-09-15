@@ -1,5 +1,5 @@
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
-//import icono from "../images/icono.png"; importar el icono de tango app
+import logo from '../images/logo.webp'
 import Dropdown from 'react-bootstrap/Dropdown';
 import "../Texto.css";
 
@@ -9,7 +9,7 @@ function Navegacion() {
       <Navbar className="roboto-texto" variant="dark" style={{ backgroundColor: '#03045E', position: 'sticky', top: 0, zIndex: 1000 }}>
         <Container>
           <img
-            src={""}
+            src={logo}
             alt=""
             style={{ marginRight: '10px', height: '50px', width: '50px', borderRadius: '10%', position: 'relative', top: '-4px' }}
           />
