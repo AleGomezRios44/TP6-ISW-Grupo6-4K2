@@ -9,79 +9,79 @@ const transportistasMock = [
     },
     {
         nombre: 'María García',
-        localidad: 'Rafaela',
+        localidad: 'rafaela',
         provincia: 'Santa Fe',
         email: 'maria.garcia@example.com'
     },
     {
         nombre: 'Carlos López',
-        localidad: 'San Rafael',
+        localidad: 'san rafael',
         provincia: 'Mendoza',
         email: 'carlos.lopez@example.com'
     },
     {
         nombre: 'Ana Fernández',
-        localidad: 'Cafayate',
+        localidad: 'cafayate',
         provincia: 'Salta',
         email: 'ana.fernandez@example.com'
     },
     {
         nombre: 'Luis Martínez',
-        localidad: 'Mar del Plata',
+        localidad: 'mar del plata',
         provincia: 'Buenos Aires',
         email: 'luis.martinez@example.com'
     },
     {
         nombre: 'Sofía Torres',
-        localidad: 'Tandil',
+        localidad: 'tandil',
         provincia: 'Buenos Aires',
         email: 'sofia.torres@example.com'
     },
     {
         nombre: 'Miguel Sánchez',
-        localidad: 'Pocito',
+        localidad: 'pocito',
         provincia: 'San Juan',
         email: 'miguel.sanchez@example.com'
     },
     {
         nombre: 'Laura Gómez',
-        localidad: 'Villa Mercedes',
+        localidad: 'villa mercedes',
         provincia: 'San Luis',
         email: 'laura.gomez@example.com'
     },
     {
         nombre: 'Pedro Ramírez',
-        localidad: 'San Martín de los Andes',
+        localidad: 'san martín de los andes',
         provincia: 'Neuquén',
         email: 'pedro.ramirez@example.com'
     },
     {
         nombre: 'Lucía Díaz',
-        localidad: 'Yerba Buena',
+        localidad: 'yerba buena',
         provincia: 'Tucumán',
         email: 'lucia.diaz@example.com'
     },
     {
         nombre: 'Jorge Herrera',
-        localidad: 'Goya',
+        localidad: 'goya',
         provincia: 'Corrientes',
         email: 'jorge.herrera@example.com'
     },
     {
         nombre: 'Elena Ruiz',
-        localidad: 'General Pico',
+        localidad: 'general pico',
         provincia: 'La Pampa',
         email: 'elena.ruiz@example.com'
     },
     {
         nombre: 'Fernando Castro',
-        localidad: 'Presidencia Roque Sáenz Peña',
+        localidad: 'presidencia roque sáenz peña',
         provincia: 'Chaco',
-        email: 'fernando.castro@example.com'
+        email: 'francomf343@gmail.com'
     },
     {
         nombre: 'Valentina Rojas',
-        localidad: 'Oberá',
+        localidad: 'oberá',
         provincia: 'Misiones',
         email: 'valentina.rojas@example.com'
     }
