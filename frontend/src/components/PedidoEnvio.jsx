@@ -6,6 +6,9 @@ import PedidoEnvioServices from "../services/PedidoEnvioServ";
 import { uploadFile } from "../services/firebase";
 import "../Texto.css";
 import { State } from "country-state-city";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 function PedidoEnvio() {
   const [fechaRetiro, setFechaRetiro] = useState(null);
@@ -134,7 +137,7 @@ function PedidoEnvio() {
       return [];
     }
   };
-  
+
   function normalizeText(text) {
     return text
       .toLowerCase() // Convierte a minúsculas
@@ -238,21 +241,19 @@ function PedidoEnvio() {
     }
 
     if (!error) {
-
       //subir fotos
-      let imgs
-      if(imagenes){
-        imgs = await uploadImgs(imagenes) //devuelve una lista con las urls de las imagenes
-      }
-      else{
-        imgs = imagenes
+      let imgs;
+      if (imagenes) {
+        imgs = await uploadImgs(imagenes); //devuelve una lista con las urls de las imagenes
+      } else {
+        imgs = imagenes;
       }
 
       //transformar los inputs
-      const localidadEntNormalizada = normalizeText(data.localidadEntrega)
-      const localidadRetNormalizada = normalizeText(data.localidadRetiro)
-      const calleEntNormalizada = normalizeText(data.calleEntrega)
-      const calleRetNormalizada = normalizeText(data.calleRetiro)
+      const localidadEntNormalizada = normalizeText(data.localidadEntrega);
+      const localidadRetNormalizada = normalizeText(data.localidadRetiro);
+      const calleEntNormalizada = normalizeText(data.calleEntrega);
+      const calleRetNormalizada = normalizeText(data.calleRetiro);
 
       //hacer el objeto con todo
       const pedidoEnvio = {
@@ -262,7 +263,7 @@ function PedidoEnvio() {
           dpto: data.dptoRetiro,
           referencia: data.referenciaRetiro,
           provincia: data.provRetiro,
-          localidad: localidadRetNormalizada
+          localidad: localidadRetNormalizada,
         },
         domicilioEntrega: {
           calle: calleEntNormalizada,
@@ -270,24 +271,91 @@ function PedidoEnvio() {
           dpto: data.dptoEntrega,
           referencia: data.referenciaEntrega,
           provincia: data.provEntrega,
-          localidad: localidadEntNormalizada
+          localidad: localidadEntNormalizada,
         },
         carga: data.carga,
         fechaRetiro: fechaRetiro,
         fechaEntrega: fechaEntrega,
-        imagenes: imgs
-      }
+        imagenes: imgs,
+      };
 
-      //mostrar modal intermedio de confirmacion de datos
-      
-      const res = await PedidoEnvioServices.guardarDatos(pedidoEnvio)
-      
-      reset()
-      Swal.fire({
-        text: "Pedido realizado correctamente. Notificación enviada.",
-        icon: "success",
-        confirmButtonText: "Ok",
+      const result = await MySwal.fire({
+        title: "Confirma tus datos",
+        html: `
+      <h2>Pedido de envío</h2>
+      <h4>Domicilio de retiro</h4>
+      <p><strong>Dirección:</strong> ${
+        pedidoEnvio.domicilioRetiro.calle +
+        " " +
+        pedidoEnvio.domicilioRetiro.altura
+      }</p>
+      <p><strong>Localidad:</strong> ${
+        pedidoEnvio.domicilioRetiro.localidad
+      }</p>
+      <p><strong>Provincia:</strong> ${
+        pedidoEnvio.domicilioRetiro.provincia
+      }</p>
+      <p><strong>Departamento:</strong> ${pedidoEnvio.domicilioRetiro.dpto}</p>
+      <p><strong>Referencia:</strong> ${
+        pedidoEnvio.domicilioRetiro.referencia
+      }</p>
+      <h4>Domicilio de entrega</h4>
+      <p><strong>Dirección:</strong> ${
+        pedidoEnvio.domicilioEntrega.calle +
+        " " +
+        pedidoEnvio.domicilioEntrega.altura
+      }</p>
+      <p><strong>Localidad:</strong> ${
+        pedidoEnvio.domicilioEntrega.localidad
+      }</p>
+      <p><strong>Provincia:</strong> ${
+        pedidoEnvio.domicilioEntrega.provincia
+      }</p>
+      <p><strong>Departamento:</strong> ${pedidoEnvio.domicilioEntrega.dpto}</p>
+      <p><strong>Referencia:</strong> ${
+        pedidoEnvio.domicilioEntrega.referencia
+      }</p>
+      <h4>Entrega:</h4>
+      <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaRetiro}</p>
+      <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaEntrega}</p>
+      <p><strong>Tipo de carga:</strong> ${pedidoEnvio.carga}</p>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
       });
+
+      if (result.isConfirmed) {
+        // Mostrar Swal de cargando mientras se guardan los datos
+        MySwal.fire({
+          title: "Guardando...",
+          text: "Por favor espera",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => {
+            Swal.showLoading(); // Mostrar el estado de "cargando"
+          },
+        });
+
+        try {
+          // Llamar a la función guardarDatos() y esperar la respuesta
+          await PedidoEnvioServices.guardarDatos(pedidoEnvio);
+
+          // Mostrar Swal de éxito cuando se guarden los datos
+          MySwal.fire({
+            icon: "success",
+            title: "Datos guardados",
+            text: "Tus datos se guardaron correctamente",
+          });
+        } catch (error) {
+          // Mostrar Swal de error si algo sale mal
+          MySwal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Hubo un problema al guardar los datos. Inténtalo de nuevo.",
+          });
+        }
+      }
     }
   };
 
@@ -475,16 +543,16 @@ function PedidoEnvio() {
                 {...register("carga", { required: true })}
               >
                 <option value="">Seleccione un tipo de carga</option>
-                <option value="0" disabled={false}>
+                <option value="Documentación" disabled={false}>
                   Documentación
                 </option>
-                <option value="1" disabled={false}>
+                <option value="Paquete" disabled={false}>
                   Paquete
                 </option>
-                <option value="2" disabled={false}>
+                <option value="Granos" disabled={false}>
                   Granos
                 </option>
-                <option value="3" disabled={false}>
+                <option value="Hacienda" disabled={false}>
                   Hacienda
                 </option>
               </select>

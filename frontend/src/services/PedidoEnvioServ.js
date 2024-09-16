@@ -155,7 +155,7 @@ const enviarMail = async (pedidoEnvio, mails) => {
         border: 1px solid #ddd;
       }
       h1 {
-        color: #007BFF;
+        color: #03045E;
       }
       p {
         margin-bottom: 10px;
@@ -169,10 +169,14 @@ const enviarMail = async (pedidoEnvio, mails) => {
       <p><strong>Dirección:</strong> ${pedidoEnvio.domicilioRetiro.calle + ' ' + pedidoEnvio.domicilioRetiro.altura}</p>
       <p><strong>Localidad:</strong> ${pedidoEnvio.domicilioRetiro.localidad}</p>
       <p><strong>Provincia:</strong> ${pedidoEnvio.domicilioRetiro.provincia}</p>
+      <p><strong>Departamento:</strong> ${pedidoEnvio.domicilioRetiro.dpto}</p>
+      <p><strong>Referencia:</strong> ${pedidoEnvio.domicilioRetiro.referencia}</p>
       <h3>Domicilio de entrega</h3>
       <p><strong>Dirección:</strong> ${pedidoEnvio.domicilioEntrega.calle + ' ' + pedidoEnvio.domicilioEntrega.altura}</p>
       <p><strong>Localidad:</strong> ${pedidoEnvio.domicilioEntrega.localidad}</p>
       <p><strong>Provincia:</strong> ${pedidoEnvio.domicilioEntrega.provincia}</p>
+      <p><strong>Departamento:</strong> ${pedidoEnvio.domicilioEntrega.dpto}</p>
+      <p><strong>Referencia:</strong> ${pedidoEnvio.domicilioEntrega.referencia}</p>
       <h3>Entrega:</h3>
       <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaRetiro}</p>
       <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaEntrega}</p>
