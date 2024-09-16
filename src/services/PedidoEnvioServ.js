@@ -1,14 +1,9 @@
-const express = require('express')
-const { DropdownDivider } = require('react-bootstrap')
-const app = express()
+let pedidosEnvio = []
 
-let pedidoEnvio = []
-let transportistasEnZona = []
-
-const transportistas = [
+const transportistasMock = [
     {
         nombre: 'Juan Pérez',
-        localidad: 'Villa Carlos Paz',
+        localidad: 'villa carlos paz',
         provincia: 'Córdoba',
         email: 'juan.perez@example.com'
     },
@@ -92,20 +87,20 @@ const transportistas = [
     }
 ];
 
-console.log(transportistas);
+const guardarDatos = (pedidoEnvio) => {
+    pedidosEnvio.push(pedidoEnvio)
+    const transportistas = buscarTransportistas(pedidoEnvio.domicilioRetiro.localidad, pedidoEnvio.domicilioRetiro.provincia)
+    //funcion de enviar mails()
+}
 
-//Preguntar de donde puedo sacar una lista de provincias
-//
-//import { State, City }  from 'country-state-city';
-//const prov = State.getStatesOfCountry("AR") -> esto es una lista de objetos, tienen una propiedad "name", con el nombre de la provincia, y un "isoCode" para identificarlas
-app.post('/guardar-datos', (req, res) => {
-    pedidoEnvio.push(req.body)
-    transportistasEnZona = buscarTransportistas(pedidoEnvio.localidad, pedidoEnvio.provincia)
+const buscarTransportistas = (localidad, provincia) => {
+    return transportistasMock.filter(transportista => 
+        transportista.localidad === localidad && transportista.provincia === provincia
+    )
+}
 
-    const buscarTransportistas = (localidad, provincia) => {
-        return transportistas.filter(transportista => 
-            transportista.localidad === localidad && transportista.provincia === provincia
-        )
-    }
+const PedidoEnvioServices = {
+    guardarDatos
+}
 
-})
+export default PedidoEnvioServices

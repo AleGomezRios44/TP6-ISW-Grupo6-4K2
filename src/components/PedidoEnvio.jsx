@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Datepicker from "./DatePicker";
 import { useState, useEffect } from "react";
-//import de los servicios
+import PedidoEnvioServices from "../services/PedidoEnvioServ";
 import { uploadFile } from "../services/firebase";
 import "../Texto.css";
 import { State } from "country-state-city";
@@ -261,7 +261,7 @@ function PedidoEnvio() {
           altura: data.alturaRetiro,
           dpto: data.dptoRetiro,
           referencia: data.referenciaRetiro,
-          provincia: data.provEntrega,
+          provincia: data.provRetiro,
           localidad: localidadRetNormalizada
         },
         domicilioEntrega: {
@@ -279,11 +279,11 @@ function PedidoEnvio() {
       }
 
       //mostrar modal intermedio de confirmacion de datos
+      
 
-      console.log(pedidoEnvio)
       //llamar a la funcion que lo guarda y pasarle el pedido, esa funcion debe enviar los mails correspondientes
-
-
+      const res = PedidoEnvioServices.guardarDatos(pedidoEnvio)
+      
       reset()
       Swal.fire({
         text: "Pedido realizado correctamente. Notificación enviada.",
@@ -459,7 +459,6 @@ function PedidoEnvio() {
             </h5>
             <div style={{ display: "inline-block" }}>
               {" "}
-              {/* Contenedor para centrar el DatePicker */}
               <Datepicker cambioFecha={tomarFechaRetiro} />
             </div>
           </div>
