@@ -280,9 +280,7 @@ function PedidoEnvio() {
 
       //mostrar modal intermedio de confirmacion de datos
       
-
-      //llamar a la funcion que lo guarda y pasarle el pedido, esa funcion debe enviar los mails correspondientes
-      const res = PedidoEnvioServices.guardarDatos(pedidoEnvio)
+      const res = await PedidoEnvioServices.guardarDatos(pedidoEnvio)
       
       reset()
       Swal.fire({
