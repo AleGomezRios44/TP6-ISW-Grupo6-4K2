@@ -134,6 +134,16 @@ function PedidoEnvio() {
     }
   };
 
+  //Funcion para borrar las imagenes subidas
+  const borrarImagenes = () => {
+    setImagenes([])
+    Swal.fire({
+      text: "Imágenes borradas correctamente.",
+      icon: "success",
+      confirmButtonText: "Ok",
+    });
+  }
+
   //Funcion que sube las imágenes a firebase para obtener el link de descarga
   const uploadImgs = async (images) => {
     try {
@@ -337,6 +347,7 @@ function PedidoEnvio() {
       <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaRetiro}</p>
       <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaEntrega}</p>
       <p><strong>Tipo de carga:</strong> ${pedidoEnvio.carga}</p>
+      <p><strong>Cantidad de imagenes subidas:</strong> ${pedidoEnvio.imagenes.length}</p>
         `,
         showCancelButton: true,
         confirmButtonText: "Confirmar",
@@ -729,6 +740,15 @@ function PedidoEnvio() {
             style={{ paddingBottom: "5px" }}
             onChange={(e) => tomarImagenes(e.target.files)}
           ></input>
+        </div>
+        <div className="serif-texto" style={{marginBottom: '10px'}}>
+          <button
+            type="button"
+            className="btn btn-warning"
+            onClick={borrarImagenes}
+          >
+            Borrar Imagenes
+          </button>
         </div>
         <div className="serif-texto">
           <button type="submit" className="btn btn-primary">

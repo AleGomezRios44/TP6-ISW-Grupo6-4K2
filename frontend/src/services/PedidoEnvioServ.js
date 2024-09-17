@@ -111,7 +111,6 @@ const guardarDatos = async (pedidoEnvio) => {
   for(let i = 0; i < transportistas.length; i++){
     mails.push(transportistas[i].email)
   }
-  console.log(pedidoEnvio, mails)
   return await enviarMail(pedidoEnvio, mails)
 };
 
@@ -181,7 +180,7 @@ const enviarMail = async (pedidoEnvio, mails) => {
       <p><strong>Referencia:</strong> ${pedidoEnvio.domicilioEntrega.referencia}</p>
       <h3>Entrega:</h3>
       <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaRetiro}</p>
-      <p><strong>Fecha retiro:</strong> ${pedidoEnvio.fechaEntrega}</p>
+      <p><strong>Fecha entrega:</strong> ${pedidoEnvio.fechaEntrega}</p>
       <p><strong>Tipo de carga:</strong> ${pedidoEnvio.carga}</p>
       ${imagenesHtml}
     </div>
