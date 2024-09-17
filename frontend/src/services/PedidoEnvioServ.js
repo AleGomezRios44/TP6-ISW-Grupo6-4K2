@@ -31,13 +31,13 @@ const transportistasMock = [
     nombre: "Carlos López",
     localidad: "san rafael",
     provincia: "Mendoza",
-    email: "carlos.lopez@example.com",
+    email: "francomf343@gmail.com",
   },
   {
     nombre: "Ana Fernández",
     localidad: "cafayate",
     provincia: "Salta",
-    email: "ana.fernandez@example.com",
+    email: "francomf343@gmail.com",
   },
   {
     nombre: "Luis Martínez",
@@ -115,11 +115,13 @@ const guardarDatos = async (pedidoEnvio) => {
   return await enviarMail(pedidoEnvio, mails)
 };
 
-const buscarTransportistas = (localidad, provincia) => {
+const buscarTransportistas = (localidadRetiro, provinciaRetiro, localidadEntrega, provinciaEntrega) => {
   return transportistasMock.filter(
     (transportista) =>
-      transportista.localidad === localidad &&
-      transportista.provincia === provincia
+      (transportista.localidad === localidadRetiro &&
+      transportista.provincia === provinciaRetiro) ||
+      (transportista.localidad === localidadEntrega &&
+        transportista.provincia === provinciaEntrega)
   );
 };
 

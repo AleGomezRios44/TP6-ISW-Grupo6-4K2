@@ -13,9 +13,11 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
+//Variables necesarias para utilizar firebase
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
+//Función para subir las imágenes al sitio
 export const uploadFile = async (file) => {
     const storageRef = ref(storage, v4());
     await uploadBytes(storageRef, file);

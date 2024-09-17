@@ -11,6 +11,7 @@ import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 
 function PedidoEnvio() {
+  //Variables para seteo de variables del formulario (no textbox)
   const [fechaRetiro, setFechaRetiro] = useState(null);
   const [fechaEntrega, setFechaEntrega] = useState(null);
   const [provincias, setProvincias] = useState([]);
@@ -18,6 +19,11 @@ function PedidoEnvio() {
   const [selectedProvinciaEntrega, setSelectedProvinciaEntrega] = useState("");
   const [imagenes, setImagenes] = useState([]);
 
+  //variables de control para validaciones
+  const MAX_IMAGE_SIZE_MB = 10;
+  const MAX_DAYS_DIFFERENCE = 10;
+
+  //useForm para tomar el formulario
   const {
     register,
     handleSubmit,
@@ -25,15 +31,18 @@ function PedidoEnvio() {
     formState: { errors },
   } = useForm();
 
+  //Obtencion de provincias desde la librería
   const fetchProvincias = async () => {
     const prov = State.getStatesOfCountry("AR");
     setProvincias(prov);
   };
 
+  //Obtención de provincias al renderizar el formulario
   useEffect(() => {
     fetchProvincias();
   }, []);
 
+  //Funciones de selección de provincias
   const handleProvinciaRetChange = (e) => {
     const provinciaId = e.target.value;
     setSelectedProvinciaRetiro(provinciaId);
@@ -44,7 +53,7 @@ function PedidoEnvio() {
     setSelectedProvinciaEntrega(provinciaId);
   };
 
-  //seteo de fecha del DatePicker (formato previo para comparacion)
+  //Seteo de fecha de los DatePicker (formato previo para comparacion)
   const tomarFechaRetiro = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -61,12 +70,14 @@ function PedidoEnvio() {
     setFechaEntrega(fechaFormateada);
   };
 
+  //Función para tomar imágenes y validarlas
   const tomarImagenes = (imagenes) => {
     let error = false;
     let totalSize = 0;
     // Tipos permitidos
     const tiposPermitidos = ["image/jpeg", "image/png", "image/jpg"];
 
+    //Validar la cantidad máxima de imágenes
     if (imagenes.length > 3) {
       Swal.fire({
         text: "No se pueden subir más de 3 imágenes.",
@@ -80,7 +91,7 @@ function PedidoEnvio() {
     for (let i = 0; i < imagenes.length; i++) {
       const fileSizeMB = imagenes[i].size / (1024 * 1024); // tamaño en MB
       totalSize += fileSizeMB;
-      if (fileSizeMB > 10) {
+      if (fileSizeMB > MAX_IMAGE_SIZE_MB) {
         Swal.fire({
           text: `La imagen ${imagenes[i].name} supera el límite de 10 MB.`,
           icon: "warning",
@@ -102,7 +113,8 @@ function PedidoEnvio() {
       }
     }
 
-    if (totalSize > 10) {
+    //Validar el tamaño máximo del total de imágenes
+    if (totalSize > MAX_IMAGE_SIZE_MB) {
       Swal.fire({
         text: "El tamaño total de las imágenes no puede superar los 10 MB.",
         icon: "warning",
@@ -122,6 +134,7 @@ function PedidoEnvio() {
     }
   };
 
+  //Funcion que sube las imágenes a firebase para obtener el link de descarga
   const uploadImgs = async (images) => {
     try {
       const imgURLs = await Promise.all(
@@ -138,6 +151,7 @@ function PedidoEnvio() {
     }
   };
 
+  //Normalizar el texto de los inputs
   function normalizeText(text) {
     return text
       .toLowerCase() // Convierte a minúsculas
@@ -145,9 +159,11 @@ function PedidoEnvio() {
       .replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
   }
 
+  //Función que toma los datos del formulario
   const onSubmit = async (data) => {
     let error = false;
 
+    //Validaciones respecto a las fechas
     const diferenciaDias =
       (new Date(fechaEntrega).getTime() - new Date(fechaRetiro).getTime()) /
       (1000 * 60 * 60 * 24);
@@ -155,20 +171,20 @@ function PedidoEnvio() {
     if (
       fechaRetiro === null ||
       fechaEntrega === null ||
-      fechaEntrega <= fechaRetiro
+      fechaEntrega < fechaRetiro
     ) {
       error = true;
       Swal.fire({
         text:
           fechaRetiro === null || fechaEntrega === null
             ? "Debe seleccionar una fecha de retiro y de entrega"
-            : "La fecha de entrega no puede ser anterior o igual a la de retiro",
+            : "La fecha de entrega no puede ser anterior a la de retiro",
         icon: "warning",
         confirmButtonText: "Ok",
       });
     }
 
-    if (diferenciaDias > 10) {
+    if (diferenciaDias > MAX_DAYS_DIFFERENCE) {
       error = true;
       Swal.fire({
         text: "La fecha de entrega debe ser como máximo de 10 días despúes del retiro",
@@ -240,6 +256,7 @@ function PedidoEnvio() {
       });
     }
 
+    //Si se pasan las validaciones se procede
     if (!error) {
       //subir fotos
       let imgs;
@@ -279,6 +296,7 @@ function PedidoEnvio() {
         imagenes: imgs,
       };
 
+      //Modal de confirmación de datos
       const result = await MySwal.fire({
         title: "Confirma tus datos",
         html: `
@@ -359,6 +377,7 @@ function PedidoEnvio() {
     }
   };
 
+  //Manejo de cancelación del formulario
   const handleCancelar = () => {
     Swal.fire({
       text: "¿Seguro que quiere cancelar la operación?",
@@ -374,6 +393,7 @@ function PedidoEnvio() {
     });
   };
 
+  //Estructura del formulario
   return (
     <div style={{ backgroundColor: "#CAF0F8", padding: "30px" }}>
       <h2 className="roboto-titulo" style={{ paddingBottom: "15px" }}>
@@ -727,4 +747,5 @@ function PedidoEnvio() {
   );
 }
 
+//Export del componente
 export default PedidoEnvio;

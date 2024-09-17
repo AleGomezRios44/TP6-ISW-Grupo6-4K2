@@ -4,10 +4,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
+//Definición del puerto para escuchar el backend
+const PORT = 3001;
+
+//Creación de aplicación backend
 const app = express();
 app.use(cors()); // Permitir solicitudes desde el frontend
 app.use(express.json());
 
+//Creación del transporter para enviar los mails
 const transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -21,6 +26,7 @@ const transporter = nodemailer.createTransport({
     rateLimit: 30 // Limitar a 30 mensajes por minuto
   })
 
+//Ruta para enviar los mails
 app.post('/send-email', async (req, res) => {
   const datosMensaje = req.body;
   try {
@@ -36,6 +42,7 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log('Backend ejecutándose en puerto 3001');
+//Mensaje de confirmación de backend escuchando en el puerto definido
+app.listen(PORT, () => {
+  console.log(`Backend ejecutándose en puerto ${PORT}`);
 });
