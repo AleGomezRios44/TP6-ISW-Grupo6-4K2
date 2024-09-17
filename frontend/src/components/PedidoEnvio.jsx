@@ -396,11 +396,11 @@ function PedidoEnvio() {
   //Estructura del formulario
   return (
     <div style={{ backgroundColor: "#CAF0F8", padding: "30px" }}>
-      <h2 className="roboto-titulo" style={{ paddingBottom: "15px" }}>
+      <h2 className="serif-titulo" style={{ paddingBottom: "15px" }}>
         Pedido de Envio
       </h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h4 className="roboto-texto">Domicilio de retiro:</h4>
+        <h4 className="serif-texto">Domicilio de retiro:</h4>
         <div
           style={{
             display: "flex",
@@ -408,8 +408,8 @@ function PedidoEnvio() {
             justifyContent: "space-between",
           }}
         >
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Calle:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Calle:</h5>
             <input
               type="string"
               className="form-control"
@@ -423,8 +423,8 @@ function PedidoEnvio() {
               </div>
             )}
           </div>
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Altura:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Altura:</h5>
             <input
               type="string"
               className="form-control"
@@ -446,9 +446,9 @@ function PedidoEnvio() {
             justifyContent: "space-between",
           }}
         >
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
             <h5
-              className="form-label roboto-texto"
+              className="form-label serif-texto"
               style={{ paddingBottom: "6px" }}
             >
               Departamento:
@@ -462,9 +462,9 @@ function PedidoEnvio() {
               defaultValue={""}
             />
           </div>
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
             <h5
-              className="form-label roboto-texto"
+              className="form-label serif-texto"
               style={{ paddingBottom: "6px" }}
             >
               Referencia:
@@ -487,8 +487,8 @@ function PedidoEnvio() {
             justifyContent: "space-between",
           }}
         >
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Provincia:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Provincia:</h5>
             <select
               className="form-select"
               {...register("provRetiro", { required: true })}
@@ -508,8 +508,8 @@ function PedidoEnvio() {
               </div>
             )}
           </div>
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Localidad:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Localidad:</h5>
             <input
               type="string"
               className="form-control"
@@ -531,14 +531,14 @@ function PedidoEnvio() {
           }}
         >
           <div
-            className="mb-3 roboto-texto"
+            className="mb-3 serif-texto"
             style={{
               flex: 1,
               textAlign: "center",
             }}
           >
             <h5
-              className="form-label roboto-texto"
+              className="form-label serif-texto"
               style={{ paddingBottom: "6px" }}
             >
               Fecha de retiro:
@@ -550,13 +550,13 @@ function PedidoEnvio() {
           </div>
 
           <div
-            className="mb-3 roboto-texto"
+            className="mb-3 serif-texto"
             style={{
               flex: 1,
               textAlign: "center",
             }}
           >
-            <h5 className="form-label roboto-texto">Tipo de carga:</h5>
+            <h5 className="form-label serif-texto">Tipo de carga:</h5>
             <div style={{ display: "inline-block", maxWidth: "250px" }}>
               <select
                 className="form-select"
@@ -584,7 +584,7 @@ function PedidoEnvio() {
             </div>
           </div>
         </div>
-        <h4 className="roboto-texto">Domicilio de entrega:</h4>
+        <h4 className="serif-texto">Domicilio de entrega:</h4>
         <div
           style={{
             display: "flex",
@@ -592,8 +592,8 @@ function PedidoEnvio() {
             justifyContent: "space-between",
           }}
         >
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Calle:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Calle:</h5>
             <input
               type="string"
               className="form-control"
@@ -607,8 +607,8 @@ function PedidoEnvio() {
               </div>
             )}
           </div>
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Altura:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Altura:</h5>
             <input
               type="string"
               className="form-control"
@@ -630,9 +630,9 @@ function PedidoEnvio() {
             justifyContent: "space-between",
           }}
         >
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
             <h5
-              className="form-label roboto-texto"
+              className="form-label serif-texto"
               style={{ paddingBottom: "6px" }}
             >
               Departamento:
@@ -646,9 +646,9 @@ function PedidoEnvio() {
               defaultValue={""}
             />
           </div>
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
             <h5
-              className="form-label roboto-texto"
+              className="form-label serif-texto"
               style={{ paddingBottom: "6px" }}
             >
               Referencia:
@@ -671,8 +671,8 @@ function PedidoEnvio() {
             justifyContent: "space-between",
           }}
         >
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Provincia:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Provincia:</h5>
             <select
               className="form-select"
               {...register("provEntrega", { required: true })}
@@ -692,8 +692,8 @@ function PedidoEnvio() {
               </div>
             )}
           </div>
-          <div className="mb-3 roboto-texto" style={{ flex: 1 }}>
-            <h5 className="form-label roboto-texto">Localidad:</h5>
+          <div className="mb-3 serif-texto" style={{ flex: 1 }}>
+            <h5 className="form-label serif-texto">Localidad:</h5>
             <input
               type="string"
               className="form-control"
@@ -707,18 +707,18 @@ function PedidoEnvio() {
             )}
           </div>
         </div>
-        <div className="mb-3 roboto-texto" style={{}}>
+        <div className="mb-3 serif-texto" style={{}}>
           <h5
-            className="form-label roboto-texto"
+            className="form-label serif-texto"
             style={{ paddingBottom: "6px" }}
           >
             Fecha de entrega:
           </h5>
           <Datepicker cambioFecha={tomarFechaEntrega} />
         </div>
-        <div className="mb-3 roboto-texto">
+        <div className="mb-3 serif-texto">
           <h4
-            className="form-label roboto-texto"
+            className="form-label serif-texto"
             style={{ paddingBottom: "6px" }}
           >
             Imagen/es de la carga:
@@ -730,7 +730,7 @@ function PedidoEnvio() {
             onChange={(e) => tomarImagenes(e.target.files)}
           ></input>
         </div>
-        <div className="roboto-texto">
+        <div className="serif-texto">
           <button type="submit" className="btn btn-primary">
             Confirmar
           </button>

@@ -6,7 +6,7 @@ import "../Texto.css";
 function Navegacion() {
   return (
     <>
-      <Navbar className="roboto-texto" variant="dark" style={{ backgroundColor: '#03045E', position: 'sticky', top: 0, zIndex: 1000 }}>
+      <Navbar className="serif-texto" variant="dark" style={{ backgroundColor: '#03045E', position: 'sticky', top: 0, zIndex: 1000 }}>
         <Container>
           <img
             src={logo}

@@ -4,7 +4,7 @@ import "../Texto.css";
 function Footer() {
   return (
     <>
-      <Navbar className="roboto-texto" variant="dark" style={{ backgroundColor: '#03045E', marginTop: 'auto', paddingTop: '10px' }}>
+      <Navbar className="serif-texto" variant="dark" style={{ backgroundColor: '#03045E', marginTop: 'auto', paddingTop: '10px' }}>
         <Container>
           <Nav className="mx-auto" style={{color: 'white'}}>
             <div style={{ marginTop: '10px' }}>

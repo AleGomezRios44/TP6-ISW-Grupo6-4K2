@@ -1,13 +1,13 @@
 
-.roboto-titulo {
-    font-family: "Roboto Condensed", sans-serif;
+.serif-titulo {
+    font-family: "Playfair Display", serif;
     font-optical-sizing: auto;
     font-weight: 450;
     font-style: normal;
   }
   
-  .roboto-texto {
-      font-family: "Roboto Condensed", sans-serif;
+  .serif-texto {
+      font-family: "Playfair Display", serif;
       font-optical-sizing: auto;
       font-weight: 400;
       font-style: normal;
