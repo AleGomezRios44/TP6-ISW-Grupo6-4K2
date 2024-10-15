@@ -5,7 +5,7 @@ import axios from "axios";
   const enviarNotificacion = async (datosMensaje) => {
     return axios({
       method: "post",
-      url: 'https://tp-6-isw-grupo6-4-k2-prdbdza54-alejandros-projects-91ff5564.vercel.app/send-email',
+      url: 'https://tp-6-isw-grupo6-4-k2.vercel.app/send-email',
       headers: {},
       data: datosMensaje,
     })
