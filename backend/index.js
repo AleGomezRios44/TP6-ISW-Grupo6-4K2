@@ -2,6 +2,7 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
 import dotenv from 'dotenv';
+//import { GoogleApis } from 'googleapis';
 dotenv.config();
 
 //Definición del puerto para escuchar el backend
@@ -16,8 +17,11 @@ app.use(express.json());
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
+      type: "OAuth2",
       user: process.env.REACT_APP_NODEMAILER_USER,
-      pass: process.env.REACT_APP_NODEMAILER_PASSWORD
+      clientId: process.env.REACT_APP_GMAIL_CLIENT_ID,
+      clientSecret: process.env.REACT_APP_GMAIL_CLIENT_SECRET,
+      refreshToken: process.env.REACT_APP_GMAIL_REFRESH_TOKEN
     },
     pool: true, // Activar el pool de conexiones
     maxConnections: 3, // Limitar a 3 conexiones concurrentes
