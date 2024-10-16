@@ -13,13 +13,13 @@ const transportistasMock = [
     nombre: "Pedro Pérez",
     localidad: "cordoba",
     provincia: "Córdoba",
-    email: "alejandrongr0809@gmail.com",
+    email: "tomasmalamud@gmail.com",
   },
   {
     nombre: "Raúl Pérez",
     localidad: "cordoba",
     provincia: "Córdoba",
-    email: "alejandrongr0809@gmail.com",
+    email: "tomasmalamud@gmail.com",
   },
   {
     nombre: "María García",
