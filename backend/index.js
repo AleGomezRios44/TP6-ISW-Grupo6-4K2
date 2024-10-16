@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
       type: "OAuth2",
       user: process.env.REACT_APP_NODEMAILER_USER,
       clientId: process.env.REACT_APP_GMAIL_CLIENT_ID,
-      clientSecret: process.env.REACT_APP_GMAIL_CLIENT_SECRET,
+      clientSecret: process.env.REACT_APP_GMAIL_CLIENT_ST,
       refreshToken: process.env.REACT_APP_GMAIL_REFRESH_TOKEN
     },
     pool: true, // Activar el pool de conexiones
