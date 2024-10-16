@@ -14,9 +14,7 @@ app.use(express.json());
 
 //Creación del transporter para enviar los mails
 const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
+    service: "gmail",
     auth: {
       user: process.env.REACT_APP_NODEMAILER_USER,
       pass: process.env.REACT_APP_NODEMAILER_PASSWORD
@@ -38,6 +36,7 @@ app.post('/send-email', async (req, res) => {
     })
     res.status(200).send('Correo enviado correctamente');
   } catch (error) {
+    console.log(error)
     res.status(500).send(error.toString());
   }
 });
